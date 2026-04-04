@@ -1,0 +1,27 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.app-content {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    margin-left: 0;
+  }
+  .app-content {
+    padding: 20px;
+  }
+}
