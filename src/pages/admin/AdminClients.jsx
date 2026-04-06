@@ -409,12 +409,13 @@ export default function AdminClients() {
   window.STRATEGIC_ANALYTICS_CLIENT_ID = "${selected.id}";
   window.STRATEGIC_ANALYTICS_API_KEY = "${selected.api_key}";
 </script>
-<script src="https://cdntracker.strategic.com/v1/tracker.js" async></script>`}
+<script src="\${window.location.origin}/tracker.js" async></script>\`}
               </pre>
             </div>
             <div className="form-actions" style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <button className="btn btn-primary" onClick={() => {
-                navigator.clipboard.writeText(`<script>\n  window.STRATEGIC_ANALYTICS_CLIENT_ID = "${selected.id}";\n  window.STRATEGIC_ANALYTICS_API_KEY = "${selected.api_key}";\n</script>\n<script src="https://cdntracker.strategic.com/v1/tracker.js" async></script>`)
+                const code = \`<script>\\n  window.STRATEGIC_ANALYTICS_CLIENT_ID = "\${selected.id}";\\n  window.STRATEGIC_ANALYTICS_API_KEY = "\${selected.api_key}";\\n</script>\\n<script src="\${window.location.origin}/tracker.js" async></script>\`;
+                navigator.clipboard.writeText(code)
                 showToast('Código copiado al portapapeles')
                 setModal(null)
               }}>
