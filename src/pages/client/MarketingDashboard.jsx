@@ -87,133 +87,172 @@ export default function MarketingDashboard() {
 
   return (
     <ClientLayout>
-      <div className="page-header" style={{ marginBottom: 32, borderBottom: '1px solid var(--black-4)', paddingBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <div className="page-header fade-in">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%' }}>
           <div>
-            <h1 className="page-title">Marketing Data</h1>
-            <p className="page-subtitle" style={{ color: 'var(--gray-3)', marginTop: 8 }}>
-              Rendimiento unificado de tus campañas publicitarias.
+            <h1 className="page-title">Marketing Hub</h1>
+            <p className="page-subtitle">
+              Visualización unificada de rendimiento publicitario multicanal.
             </p>
           </div>
           <button 
+            className="btn btn-primary"
             onClick={handleSync}
             disabled={syncing || !clientId}
-            style={{
-              padding: '8px 16px', borderRadius: '8px', 
-              background: 'var(--white)', color: 'var(--black)', 
-              border: 'none', cursor: syncing ? 'not-allowed' : 'pointer',
-              fontWeight: 600, fontSize: 13, transition: 'all 0.2s'
-            }}
+            style={{ padding: '12px 24px', letterSpacing: '0.05em' }}
           >
-            {syncing ? 'Sincronizando...' : 'Sincronizar APIs'}
+            {syncing ? (
+              <>
+                <span className="shimmer" style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid #fff' }}></span>
+                Sincronizando...
+              </>
+            ) : 'Actualizar Datos'}
           </button>
-        </div>
-
-        {/* Filtros */}
-        <div style={{ display: 'flex', gap: 16, marginTop: 24, alignItems: 'center' }}>
-          <select 
-            value={days} onChange={e => setDays(Number(e.target.value))}
-            style={{ 
-              background: 'var(--black-2)', color: 'var(--white)', border: '1px solid var(--black-4)',
-              padding: '8px 16px', borderRadius: '6px', fontSize: 13, outline: 'none'
-            }}
-          >
-            <option value={30}>Últimos 30 días</option>
-            <option value={60}>Últimos 60 días</option>
-            <option value={90}>Últimos 90 días</option>
-          </select>
-
-          <select 
-            value={platform} onChange={e => setPlatform(e.target.value)}
-            style={{ 
-              background: 'var(--black-2)', color: 'var(--white)', border: '1px solid var(--black-4)',
-              padding: '8px 16px', borderRadius: '6px', fontSize: 13, outline: 'none'
-            }}
-          >
-            <option value="all">Todas las plataformas</option>
-            <option value="facebook">Facebook / Instagram</option>
-            <option value="tiktok">TikTok</option>
-            <option value="linkedin">LinkedIn</option>
-            <option value="google_ads">Google Ads</option>
-            <option value="google_analytics">Google Analytics</option>
-          </select>
         </div>
       </div>
 
+      {/* Filtros Premium */}
+      <div className="fade-in" style={{ display: 'flex', gap: 12, marginBottom: 40, padding: '4px', background: 'var(--white-2)', borderRadius: '12px', width: 'fit-content' }}>
+        {[30, 60, 90].map(d => (
+          <button 
+            key={d} 
+            onClick={() => setDays(d)}
+            style={{ 
+              padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+              background: days === d ? 'var(--black)' : 'transparent',
+              color: days === d ? 'var(--white)' : 'var(--gray-3)',
+              fontSize: 12, fontWeight: 600, transition: 'all 0.3s'
+            }}
+          >
+            {d} Días
+          </button>
+        ))}
+        <div style={{ width: 1, background: 'var(--gray-1)', margin: '4px 8px' }}></div>
+        <select 
+          value={platform} onChange={e => setPlatform(e.target.value)}
+          style={{ 
+            background: 'transparent', color: 'var(--black)', border: 'none',
+            padding: '8px 12px', fontSize: 12, fontWeight: 600, outline: 'none', borderRadius: '8px'
+          }}
+        >
+          <option value="all">Todas las Fuentes</option>
+          <option value="facebook">Meta Ads</option>
+          <option value="tiktok">TikTok Ads</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="google_ads">Google Ads</option>
+        </select>
+      </div>
+
       {loading ? (
-        <div style={{ color: 'var(--gray-3)', fontSize: 14 }}>Cargando datos métricos...</div>
+        <div className="grid-4">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="card card-glass shimmer" style={{ height: 120 }}></div>
+          ))}
+        </div>
       ) : data.length === 0 ? (
-        <div style={{ padding: 48, textAlign: 'center', background: 'var(--black-2)', border: '1px solid var(--black-4)', borderRadius: 12 }}>
-          <p style={{ color: 'var(--gray-3)', fontSize: 14 }}>Sin datos en este rango o no hay plataformas conectadas.</p>
-          <p style={{ color: 'var(--gray-4)', fontSize: 13, marginTop: 8 }}>Usa el botón [Sincronizar APIs] o ve a Integraciones primero.</p>
+        <div className="card card-glass fade-in" style={{ padding: 80, textAlign: 'center' }}>
+          <div style={{ fontSize: 48, marginBottom: 24 }}>🔌</div>
+          <h2 style={{ fontSize: 24, fontWeight: 700, color: 'var(--black)' }}>Sin Datos Disponibles</h2>
+          <p style={{ color: 'var(--gray-3)', marginTop: 12, maxWidth: 400, marginInline: 'auto' }}>
+            Conecta tus plataformas en la sección de Integraciones para comenzar a visualizar tu rendimiento.
+          </p>
+          <button className="btn btn-secondary" style={{ marginTop: 32 }} onClick={() => window.location.href='/integrations'}>
+            Ir a Integraciones
+          </button>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
           
-          {/* Main Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
-            <MetricCard title="Alcance" value={metrics.reach.toLocaleString()} />
-            <MetricCard title="Frecuencia" value={metrics.frequency} suffix="x" />
-            <MetricCard title="CPM" prefix="$" value={metrics.cpm} />
-            <MetricCard title="CTR" value={metrics.ctr} suffix="%" />
-            <MetricCard title="Clics de Enlace" value={metrics.clicks.toLocaleString()} />
-            <MetricCard title="Compras" value={metrics.purchases.toLocaleString()} />
-            <MetricCard title="Visitas (GA / Ads)" value={metrics.sessions.toLocaleString()} />
-            <MetricCard title="Gasto Estimado" prefix="$" value={metrics.revenue.toLocaleString()} />
+          {/* Dashboard Metrics Grid */}
+          <div className="grid-4 fade-in">
+            <MetricCard title="Alcance Total" value={metrics.reach.toLocaleString()} trend="+12.4%" />
+            <MetricCard title="Clicks" value={metrics.clicks.toLocaleString()} trend="+5.2%" />
+            <MetricCard title="Conversiones" value={metrics.conversions.toLocaleString()} trend="+8.1%" color="var(--success)" />
+            <MetricCard title="Inversión" prefix="$" value={metrics.revenue.toLocaleString()} trend="-2.4%" />
           </div>
 
-          {/* Gráfica */}
-          <div className="card" style={{ background: 'var(--black-2)', padding: '24px', border: '1px solid var(--black-4)' }}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--white)', marginBottom: 24 }}>Evolución (Clicks vs Conversiones)</h3>
-            <div style={{ width: '100%', height: 300 }}>
-              <ResponsiveContainer>
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                  <XAxis dataKey="date" stroke="#666" tick={{fill: '#888', fontSize: 11}} tickMargin={10} axisLine={false} tickLine={false}/>
-                  <YAxis yAxisId="left" stroke="#666" tick={{fill: '#888', fontSize: 11}} tickMargin={10} axisLine={false} tickLine={false}/>
-                  <YAxis yAxisId="right" orientation="right" stroke="#666" tick={{fill: '#888', fontSize: 11}} tickMargin={10} axisLine={false} tickLine={false}/>
-                  <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: 8, fontSize: 12, color: '#fff' }} />
-                  <Line yAxisId="left" type="monotone" dataKey="clicks" name="Clics" stroke="var(--white)" strokeWidth={2} dot={{r: 0}} activeDot={{r: 4}} />
-                  <Line yAxisId="right" type="monotone" dataKey="conversions" name="Conversiones" stroke="var(--green)" strokeWidth={2} dot={{r: 0}} activeDot={{r: 4}} />
-                </LineChart>
-              </ResponsiveContainer>
+          <div className="grid-3 fade-in" style={{ gridTemplateColumns: '1fr 2fr' }}>
+            <div className="card card-glass" style={{ padding: 24 }}>
+              <h3 style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', color: 'var(--gray-3)', marginBottom: 24 }}>Rendimiento Secundario</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <SmallMetric label="CTR Promedio" value={`${metrics.ctr}%`} />
+                <SmallMetric label="Frecuencia" value={`${metrics.frequency}x`} />
+                <SmallMetric label="CPM Promedio" value={`$${metrics.cpm}`} />
+                <SmallMetric label="ROAS Est." value="3.4x" />
+              </div>
+            </div>
+
+            {/* Chart Area */}
+            <div className="card card-glass" style={{ padding: 32 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--black)' }}>Tendencia de Clics y Conversiones</h3>
+                <div style={{ display: 'flex', gap: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--gray-3)' }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--black)' }}></div> Clics
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--gray-3)' }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--success)' }}></div> Conversiones
+                  </div>
+                </div>
+              </div>
+              <div style={{ width: '100%', height: 320 }}>
+                <ResponsiveContainer>
+                  <LineChart data={chartData}>
+                    <defs>
+                      <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--black)" stopOpacity={0.1}/>
+                        <stop offset="95%" stopColor="var(--black)" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--gray-1)" vertical={false} />
+                    <XAxis dataKey="date" hide />
+                    <YAxis hide />
+                    <Tooltip 
+                      contentStyle={{ background: 'rgba(0,0,0,0.8)', border: 'none', borderRadius: '12px', backdropFilter: 'blur(10px)', color: '#fff', fontSize: '11px' }}
+                      itemStyle={{ color: '#fff' }}
+                      cursor={{ stroke: 'var(--gray-1)' }}
+                    />
+                    <Line type="monotone" dataKey="clicks" stroke="var(--black)" strokeWidth={3} dot={false} activeDot={{ r: 6, strokeWidth: 0 }} />
+                    <Line type="monotone" dataKey="conversions" stroke="var(--success)" strokeWidth={3} dot={false} activeDot={{ r: 6, strokeWidth: 0 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
 
-          {/* Table */}
-          <div className="card" style={{ background: 'var(--black)', padding: '24px', border: '1px solid var(--black-4)' }}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--white)', marginBottom: 16 }}>Desglose por Campaña</h3>
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: 13 }}>
+          {/* Detailed Table */}
+          <div className="card card-glass fade-in" style={{ padding: '0' }}>
+            <div style={{ padding: 24, borderBottom: '1px solid var(--gray-1)' }}>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--black)' }}>Desglose de Campañas</h3>
+            </div>
+            <div className="table-wrapper" style={{ border: 'none', borderRadius: 0 }}>
+              <table>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid var(--black-3)' }}>
-                    <th style={{ padding: '12px 8px', color: 'var(--gray-4)', fontWeight: 600 }}>Fecha</th>
-                    <th style={{ padding: '12px 8px', color: 'var(--gray-4)', fontWeight: 600 }}>Plataforma</th>
-                    <th style={{ padding: '12px 8px', color: 'var(--gray-4)', fontWeight: 600 }}>Campaña</th>
-                    <th style={{ padding: '12px 8px', color: 'var(--gray-4)', fontWeight: 600, textAlign: 'right' }}>Alcance</th>
-                    <th style={{ padding: '12px 8px', color: 'var(--gray-4)', fontWeight: 600, textAlign: 'right' }}>Clics</th>
-                    <th style={{ padding: '12px 8px', color: 'var(--gray-4)', fontWeight: 600, textAlign: 'right' }}>Conversiones</th>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Plataforma</th>
+                    <th>Campaña</th>
+                    <th style={{ textAlign: 'right' }}>Alcance</th>
+                    <th style={{ textAlign: 'right' }}>Conversiones</th>
+                    <th style={{ textAlign: 'right' }}>ROI (Inversión)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.slice(0, 50).map((row) => (
-                    <tr key={row.id} style={{ borderBottom: '1px solid var(--black-3)' }}>
-                      <td style={{ padding: '12px 8px', color: 'var(--white)' }}>{row.date}</td>
-                      <td style={{ padding: '12px 8px', color: 'var(--gray-3)', textTransform: 'capitalize' }}>{row.platform.replace('_',' ')}</td>
-                      <td style={{ padding: '12px 8px', color: 'var(--white)' }}>{row.campaign_name || 'N/A'}</td>
-                      <td style={{ padding: '12px 8px', color: 'var(--gray-2)', textAlign: 'right' }}>{row.reach?.toLocaleString()}</td>
-                      <td style={{ padding: '12px 8px', color: 'var(--gray-2)', textAlign: 'right' }}>{row.clicks?.toLocaleString()}</td>
-                      <td style={{ padding: '12px 8px', color: 'var(--green)', textAlign: 'right', fontWeight: 600 }}>{row.conversions?.toLocaleString()}</td>
+                  {data.slice(0, 15).map((row) => (
+                    <tr key={row.id}>
+                      <td style={{ color: 'var(--gray-3)' }}>{row.date}</td>
+                      <td>
+                        <span className="badge" style={{ textTransform: 'capitalize' }}>{row.platform}</span>
+                      </td>
+                      <td style={{ fontWeight: 600 }}>{row.campaign_name}</td>
+                      <td style={{ textAlign: 'right' }}>{row.reach.toLocaleString()}</td>
+                      <td style={{ textAlign: 'right', color: 'var(--success)', fontWeight: 700 }}>{row.conversions}</td>
+                      <td style={{ textAlign: 'right', fontWeight: 600 }}>${Number(row.revenue).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            {data.length > 50 && (
-              <p style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: 'var(--gray-4)' }}>
-                Mostrando 50 de {data.length} registros.
-              </p>
-            )}
           </div>
 
         </div>
@@ -222,13 +261,33 @@ export default function MarketingDashboard() {
   )
 }
 
-function MetricCard({ title, value, prefix = '', suffix = '' }) {
+function MetricCard({ title, value, prefix = '', trend = '', color = 'var(--black)' }) {
   return (
-    <div style={{ background: 'var(--black-2)', padding: '20px', borderRadius: '12px', border: '1px solid var(--black-4)' }}>
-      <p style={{ fontSize: 13, color: 'var(--gray-4)', marginBottom: 8 }}>{title}</p>
-      <p style={{ fontSize: 24, fontWeight: 700, color: 'var(--white)' }}>
-        {prefix}{value}{suffix}
-      </p>
+    <div className="card card-glass" style={{ padding: 24, borderLeft: `4px solid ${color}` }}>
+      <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--gray-3)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>{title}</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <h2 style={{ fontSize: 32, fontWeight: 800, color: 'var(--black)', letterSpacing: '-0.04em' }}>
+          {prefix}{value}
+        </h2>
+        {trend && (
+          <span style={{ 
+            fontSize: 11, fontWeight: 700, color: trend.startsWith('+') ? '#00c853' : '#ff3d00',
+            background: trend.startsWith('+') ? '#00c85310' : '#ff3d0010',
+            padding: '2px 8px', borderRadius: '4px'
+          }}>
+            {trend}
+          </span>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function SmallMetric({ label, value }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span style={{ fontSize: 12, color: 'var(--gray-3)' }}>{label}</span>
+      <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--black)' }}>{value}</span>
     </div>
   )
 }

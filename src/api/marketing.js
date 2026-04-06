@@ -115,33 +115,48 @@ export async function syncMarketingData(clientId) {
 
     // Simulamos generación de datos para las activas (últimos 90 días por si acaso)
     const newRecords = []
+    const daysToSync = 90
     
     activeIntegrations.forEach(int => {
-      // Create some mock points backwards
-      for(let i=0; i<90; i+= Math.floor(Math.random() * 3) + 1) {
+      // Configuramos multiplicadores básicos por plataforma para realismo
+      const multipliers = {
+        facebook: { reach: 1, cpc: 0.8, conv: 0.02 },
+        tiktok: { reach: 1.5, cpc: 0.4, conv: 0.015 },
+        google_ads: { reach: 0.8, cpc: 1.2, conv: 0.035 },
+        linkedin: { reach: 0.4, cpc: 4.5, conv: 0.01 },
+        google_analytics: { reach: 1, cpc: 0, conv: 0.025 }
+      }[int.platform] || { reach: 1, cpc: 1, conv: 0.02 };
+
+      // Generamos puntos hacia atrás
+      for(let i=0; i<daysToSync; i++) {
         const d = new Date()
         d.setDate(d.getDate() - i)
+        
+        const baseReach = Math.floor(Math.random() * 5000 * multipliers.reach) + 500
+        const clicks = Math.floor(baseReach * (0.01 + Math.random() * 0.02)) // 1-3% CTR
+        const conv = Math.floor(clicks * multipliers.conv * (0.8 + Math.random() * 0.4))
+        const spent = clicks * multipliers.cpc * (0.9 + Math.random() * 0.2)
         
         newRecords.push({
           client_id: clientId,
           platform: int.platform,
           date: d.toISOString().split('T')[0],
-          campaign_name: `Camp ${int.platform.toUpperCase()} - ${Math.floor(Math.random() * 5)}`,
-          adset_name: `Adset ${i}`,
-          ad_name: `Ad ${i}`,
-          impressions: Math.floor(Math.random() * 5000) + 500,
-          reach: Math.floor(Math.random() * 4000) + 300,
-          clicks: Math.floor(Math.random() * 300) + 10,
-          purchases: Math.floor(Math.random() * 10),
-          conversions: Math.floor(Math.random() * 10),
-          revenue: Math.floor(Math.random() * 500),
+          campaign_name: `Camp ${int.platform.toUpperCase()} - ${1 + (i % 3)}`,
+          adset_name: `Adset ${1 + (i % 5)}`,
+          ad_name: `Creative ${1 + (i % 10)}`,
+          impressions: Math.floor(baseReach * 1.2),
+          reach: baseReach,
+          clicks: clicks,
+          purchases: Math.floor(conv * 0.7),
+          conversions: conv,
+          revenue: spent, // En este contexto revenue = gasto/inversión para el dashboard
         })
       }
     })
 
     const { error: insertError } = await supabase
       .from('marketing_data')
-      .insert(newRecords)
+      .upsert(newRecords, { onConflict: 'client_id,platform,date,campaign_name,adset_name,ad_name' })
 
     if (insertError) throw insertError
 

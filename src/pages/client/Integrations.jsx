@@ -68,71 +68,86 @@ export default function Integrations() {
 
   return (
     <ClientLayout>
-      <div className="page-header" style={{ marginBottom: 32, borderBottom: '1px solid var(--black-4)', paddingBottom: 24 }}>
+      <div className="page-header fade-in">
         <div>
           <h1 className="page-title">Integraciones</h1>
-          <p className="page-subtitle" style={{ color: 'var(--gray-3)', marginTop: 8 }}>
-            Conecta tus fuentes de datos para unificar tus métricas de marketing.
+          <p className="page-subtitle">
+            Conecta tus fuentes de datos para unificar tus métricas de marketing en un solo lugar.
           </p>
         </div>
       </div>
 
       {loading ? (
-        <div style={{ color: 'var(--gray-3)', fontSize: 14 }}>Cargando integraciones...</div>
+        <div className="fade-in" style={{ display: 'flex', alignItems: 'center', gap: 12, color: 'var(--gray-3)' }}>
+          <div className="shimmer" style={{ width: 24, height: 24, borderRadius: '50%' }}></div>
+          Cargando configuración...
+        </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 24 }}>
-          {PLATFORMS.map(plat => {
+        <div className="grid-3 fade-in" style={{ marginTop: 8 }}>
+          {PLATFORMS.map((plat, idx) => {
             const connected = isConnected(plat.id)
             const isProcessing = actionLoading === plat.id
 
             return (
-              <div key={plat.id} className="card" style={{ 
-                background: 'var(--black-2)', 
-                border: '1px solid var(--black-4)',
-                padding: '24px',
+              <div key={plat.id} className="card card-glass fade-in" style={{ 
+                animationDelay: `${idx * 0.1}s`,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 16
+                gap: 24,
+                position: 'relative',
+                overflow: 'hidden'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div style={{ 
-                    width: 48, height: 48, borderRadius: '12px', 
-                    background: connected ? `${plat.color}15` : 'var(--black-3)',
-                    border: `1px solid ${connected ? plat.color : 'var(--black-4)'}`,
+                    width: 56, height: 56, borderRadius: '16px', 
+                    background: connected ? `${plat.color}20` : 'var(--white-2)',
+                    border: `1px solid ${connected ? plat.color : 'var(--gray-1)'}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 24
+                    fontSize: 28,
+                    boxShadow: connected ? `0 0 20px ${plat.color}30` : 'none',
+                    transition: 'all 0.4s ease'
                   }}>
                     {plat.icon}
                   </div>
-                  <div>
-                    <h3 style={{ fontSize: 16, fontWeight: 600, color: 'var(--white)' }}>{plat.name}</h3>
-                    <p style={{ fontSize: 13, color: connected ? 'var(--green)' : 'var(--gray-4)', marginTop: 4, fontWeight: connected ? 600 : 400 }}>
-                      {connected ? '● Conectado' : '○ No conectado'}
-                    </p>
+                  <div className={`badge ${connected ? 'badge-green' : ''}`} style={{ 
+                    background: connected ? 'var(--success)' : 'transparent',
+                    borderColor: connected ? 'var(--success)' : 'var(--gray-1)',
+                    color: connected ? 'var(--black)' : 'var(--gray-3)'
+                  }}>
+                    {connected ? 'Activo' : 'Disponible'}
                   </div>
                 </div>
 
-                <div style={{ flex: 1 }}></div>
+                <div>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--black)', letterSpacing: '-0.02em' }}>
+                    {plat.name}
+                  </h3>
+                  <p style={{ fontSize: 13, color: 'var(--gray-3)', marginTop: 4, lineHeight: 1.4 }}>
+                    Sincroniza campañas, anuncios y conversiones de {plat.name} automáticamente.
+                  </p>
+                </div>
 
-                {connected ? (
-                  <button 
-                    className="btn btn-secondary"
-                    onClick={() => handleDisconnect(plat.id)}
-                    disabled={isProcessing}
-                    style={{ width: '100%', marginTop: 8 }}
-                  >
-                    {isProcessing ? 'Desconectando...' : 'Desconectar'}
-                  </button>
-                ) : (
-                  <button 
-                    className="btn btn-primary"
-                    onClick={() => handleConnect(plat.id)}
-                    disabled={isProcessing}
-                    style={{ width: '100%', marginTop: 8 }}
-                  >
-                    {isProcessing ? 'Conectando...' : 'Conectar Cuenta'}
-                  </button>
-                )}
+                <div style={{ marginTop: 'auto' }}>
+                  {connected ? (
+                    <button 
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => handleDisconnect(plat.id)}
+                      disabled={isProcessing}
+                      style={{ width: '100%', textTransform: 'none', letterSpacing: '0' }}
+                    >
+                      {isProcessing ? 'Desconectando...' : 'Gestionar Conexión'}
+                    </button>
+                  ) : (
+                    <button 
+                      className="btn btn-primary btn-sm"
+                      onClick={() => handleConnect(plat.id)}
+                      disabled={isProcessing}
+                      style={{ width: '100%', background: plat.color, borderColor: plat.color }}
+                    >
+                      {isProcessing ? 'Iniciando OAuth...' : 'Conectar Cuenta'}
+                    </button>
+                  )}
+                </div>
               </div>
             )
           })}
