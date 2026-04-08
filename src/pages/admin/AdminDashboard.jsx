@@ -126,7 +126,7 @@ export default function AdminDashboard() {
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
           <div>
             <h1 className="page-title">Panel de Control</h1>
-            <p className="page-subtitle">Métricas globales y por cliente del ecosistema Strategic</p>
+            <p className="page-subtitle">Métricas globales y por cliente del ecosistema Sapiens</p>
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
             <div style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'var(--white)', padding: '6px 16px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--gray-1)' }}>

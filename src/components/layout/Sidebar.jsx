@@ -54,7 +54,7 @@ export default function Sidebar({ role = 'client' }) {
       <div className="sidebar-logo">
         <div className="sidebar-logo-icon">S</div>
         <div>
-          <span className="sidebar-logo-name">Strategic</span>
+          <span className="sidebar-logo-name">Sapiens</span>
           <span className="sidebar-logo-tag">{role === 'admin' ? 'Admin' : 'Analytics'}</span>
         </div>
       </div>

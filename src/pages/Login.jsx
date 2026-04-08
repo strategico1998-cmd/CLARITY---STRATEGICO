@@ -33,8 +33,8 @@ export default function Login() {
       <div className="login-card fade-in">
         {/* Logo */}
         <div className="login-header">
-          <div className="login-logo">C</div>
-          <h1 className="login-title">Strategic Analytics</h1>
+          <div className="login-logo">S</div>
+          <h1 className="login-title">Sapiens Analytics</h1>
           <p className="login-subtitle">Panel de control de analítica web</p>
         </div>
 
@@ -80,7 +80,7 @@ export default function Login() {
         </form>
 
         <p className="login-footer">
-          Plataforma SaaS © 2025 Strategic Analytics
+          Plataforma SaaS © 2025 Sapiens Analytics
         </p>
       </div>
     </div>
