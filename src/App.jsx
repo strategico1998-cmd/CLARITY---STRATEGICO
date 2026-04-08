@@ -16,6 +16,7 @@ import AdminSecurity   from './pages/admin/AdminSecurity.jsx'
 import ClientDashboard from './pages/client/ClientDashboard.jsx'
 import Onboarding      from './pages/client/Onboarding.jsx'
 import Heatmaps        from './pages/client/Heatmaps.jsx'
+import Recordings      from './pages/client/Recordings.jsx'
 import Events          from './pages/client/Events.jsx'
 import Funnels         from './pages/client/Funnels.jsx'
 import Behavior        from './pages/client/Behavior.jsx'
@@ -59,6 +60,9 @@ export default function App() {
         } />
         <Route path="/heatmaps" element={
           <ClientRoute><Heatmaps /></ClientRoute>
+        } />
+        <Route path="/recordings" element={
+          <ClientRoute><Recordings /></ClientRoute>
         } />
         <Route path="/events" element={
           <ClientRoute><Events /></ClientRoute>

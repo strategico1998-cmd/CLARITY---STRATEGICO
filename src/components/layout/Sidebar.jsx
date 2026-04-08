@@ -6,6 +6,13 @@ import {
   IconSecurity, IconWeb, IconHeatmap, IconFunnel, 
   IconBehavior, IconSearch, IconLogout 
 } from '../icons/Icons.jsx'
+
+const IconRecording = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="23 7 16 12 23 17 23 7"/>
+    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+  </svg>
+)
 import './Sidebar.css'
 
 const adminNav = [
@@ -16,15 +23,16 @@ const adminNav = [
 ]
 
 const clientNav = [
-  { to: '/dashboard',       label: 'Dashboard',    icon: <IconDashboard /> },
-  { to: '/onboarding',      label: 'Sitios',       icon: <IconWeb /> },
-  { to: '/heatmaps',        label: 'Heatmaps',     icon: <IconHeatmap /> },
-  { to: '/events',          label: 'Eventos',      icon: <IconPlans /> },
-  { to: '/funnels',         label: 'Embudos',      icon: <IconFunnel /> },
-  { to: '/behavior',        label: 'Comportamiento',icon: <IconBehavior /> },
-  { to: '/segmentation',    label: 'Segmentación', icon: <IconSearch /> },
-  { to: '/integrations',    label: 'Integraciones',icon: <IconWeb /> },
-  { to: '/marketing',       label: 'Marketing Data',icon: <IconDashboard /> },
+  { to: '/dashboard',       label: 'Dashboard',      icon: <IconDashboard /> },
+  { to: '/onboarding',      label: 'Sitios',         icon: <IconWeb /> },
+  { to: '/heatmaps',        label: 'Heatmaps',       icon: <IconHeatmap /> },
+  { to: '/recordings',      label: 'Grabaciones',    icon: <IconRecording /> },
+  { to: '/events',          label: 'Eventos',        icon: <IconPlans /> },
+  { to: '/funnels',         label: 'Embudos',        icon: <IconFunnel /> },
+  { to: '/behavior',        label: 'Comportamiento', icon: <IconBehavior /> },
+  { to: '/segmentation',    label: 'Segmentación',   icon: <IconSearch /> },
+  { to: '/integrations',    label: 'Integraciones',  icon: <IconWeb /> },
+  { to: '/marketing',       label: 'Marketing Data', icon: <IconDashboard /> },
   { to: '/team',            label: 'Equipo y Accesos', icon: <IconClients /> },
 ]
 
